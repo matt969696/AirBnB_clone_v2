@@ -134,7 +134,7 @@ class HBNBCommand(cmd.Cmd):
                 new_instance.__dict__[parsed[0]] = int(parsed[1])
             elif parsed[1].replace('.', '', 1).isdigit():
                 new_instance.__dict__[parsed[0]] = float(parsed[1])
-            elif parsed[1][0] == '-' :
+            elif parsed[1][0] == '-':
                 if parsed[1][1:].replace('.', '', 1).isdigit():
                     new_instance.__dict__[parsed[0]] = float(parsed[1])
 
