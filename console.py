@@ -118,13 +118,28 @@ class HBNBCommand(cmd.Cmd):
         if not args:
             print("** class name missing **")
             return
-        elif args not in HBNBCommand.classes:
+        args = args.split(" ")
+        if args[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[args]()
-        storage.save()
+
+        new_instance = HBNBCommand.classes[args[0]]()
+        for i in range(1, len(args)):
+            parsed = args[i].split("=")
+            if parsed[1][0] == '"' and parsed[1][-1] == '"':
+                parsed[1] = parsed[1][1:-1]
+                parsed[1] = parsed[1].replace("_", " ")
+                new_instance.__dict__[parsed[0]] = parsed[1]
+            elif parsed[1].isdigit():
+                new_instance.__dict__[parsed[0]] = int(parsed[1])
+            elif parsed[1].replace('.', '', 1).isdigit():
+                new_instance.__dict__[parsed[0]] = float(parsed[1])
+            elif parsed[1][0] == '-' :
+                if parsed[1][1:].replace('.', '', 1).isdigit():
+                    new_instance.__dict__[parsed[0]] = float(parsed[1])
+
+        new_instance.save()
         print(new_instance.id)
-        storage.save()
 
     def help_create(self):
         """ Help information for the create method """
