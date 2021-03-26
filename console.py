@@ -129,6 +129,7 @@ class HBNBCommand(cmd.Cmd):
             if parsed[1][0] == '"' and parsed[1][-1] == '"':
                 parsed[1] = parsed[1][1:-1]
                 parsed[1] = parsed[1].replace("_", " ")
+                parsed[1] = parsed[1].replace('\\','')
                 new_instance.__dict__[parsed[0]] = parsed[1]
             elif parsed[1].isdigit():
                 new_instance.__dict__[parsed[0]] = int(parsed[1])
