@@ -1,9 +1,17 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, String, ForeignKey, Integer, Float
+from sqlalchemy import Column, String, ForeignKey, Integer, Float, Table
 from sqlalchemy.orm import relationship
 from os import getenv
+
+
+place_amenity = Table('place_amenity', Base.metadata,
+                      Column('place_id', String(60), ForeignKey('places.id'),
+                             primary_key=True, nullable=False),
+                      Column('amenity_id', String(60),
+                             ForeignKey('amenities.id'),
+                             primary_key=True, nullable=False))
 
 
 class Place(BaseModel, Base):
@@ -21,13 +29,30 @@ class Place(BaseModel, Base):
     longitude = Column(Float, nullable=True)
     amenity_ids = []
     reviews = relationship("Review", cascade="delete, all", backref="place")
+    amenities = relationship("Amenity", secondary="place_amenity",
+                             viewonly=False)
 
     if getenv("HBNB_TYPE_STORAGE") != 'db':
         @property
         def reviews(self):
-            """Getter for cities when using FileStorage mode"""
+            """Getter for reviews when using FileStorage mode"""
             ret = []
             for r in models.storage.all(Rewiew):
                 if r.place_id == self.id:
                     ret.append(r)
             return ret
+
+        @property
+        def amenities(self):
+            """Getter for amenities when using FileStorage mode"""
+            ret = []
+            for a in models.storage.all(Amenity):
+                if a.id in self.amenity_ids:
+                    ret.append(a)
+            return ret
+
+        @amenities.setter
+        def amenities(self, obj):
+            """Setter for amenities Object"""
+            if type(obj) == Amenity:
+                self.amenity_ids.append(obj.id)
