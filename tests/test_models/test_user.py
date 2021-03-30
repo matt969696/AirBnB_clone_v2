@@ -1,34 +1,48 @@
 #!/usr/bin/python3
-""" """
-from tests.test_models.test_base_model import test_basemodel
+""" Unit tests User class """
 from models.user import User
+import unittest
+from datetime import datetime
 
 
-class test_User(test_basemodel):
-    """ """
+class TestUser(unittest.TestCase):
+    """ Unit tests User class """
 
-    def __init__(self, *args, **kwargs):
-        """ """
-        super().__init__(*args, **kwargs)
-        self.name = "User"
-        self.value = User
+    def setUp(self):
+        """ Initialization """
+        self.user_1 = User()
+        self.user_1.email = "holberton@school.com"
+        self.user_1.password = "***"
+        self.user_1.first_name = "Max"
+        self.user_1.last_name = "James"
+        self.user_2 = User()
+        self.user_2.email = "holberton2@school.com"
+        self.user_2.password = "***"
 
-    def test_first_name(self):
-        """ """
-        new = self.value()
-        self.assertEqual(type(new.first_name), str)
+    def test_attr_base(self):
+        """ Test attribut BaseModel """
+        self.assertIsNotNone(self.user_1.id)
+        self.assertIsNotNone(self.user_1.created_at)
+        self.assertIsNotNone(self.user_1.updated_at)
 
-    def test_last_name(self):
-        """ """
-        new = self.value()
-        self.assertEqual(type(new.last_name), str)
+    def test_type_attr_base(self):
+        """ Test type attribut BaseModel """
+        self.assertEqual(type(self.user_1.id), str)
+        self.assertEqual(type(self.user_1.created_at), datetime)
+        self.assertEqual(type(self.user_1.updated_at), datetime)
 
-    def test_email(self):
-        """ """
-        new = self.value()
-        self.assertEqual(type(new.email), str)
+    def test_attr(self):
+        """ Test attribut User class """
+        self.assertEqual(self.user_1.first_name, "Max")
+        self.assertEqual(self.user_1.last_name, "James")
+        self.assertEqual(self.user_1.email, "holberton@school.com")
+        self.assertEqual(self.user_1.password, "***")
+        self.assertEqual(self.user_2.first_name, None)
+        self.assertEqual(self.user_2.last_name, None)
 
-    def test_password(self):
-        """ """
-        new = self.value()
-        self.assertEqual(type(new.password), str)
+    def test_type_args(self):
+        """ Test type attribut User """
+        self.assertEqual(type(self.user_1.first_name), str)
+        self.assertEqual(type(self.user_1.last_name), str)
+        self.assertEqual(type(self.user_1.email), str)
+        self.assertEqual(type(self.user_1.password), str)

@@ -1,19 +1,40 @@
 #!/usr/bin/python3
-""" """
-from tests.test_models.test_base_model import test_basemodel
+""" Unit tests City class """
 from models.city import City
+from models.state import State
+import unittest
+from datetime import datetime
 
 
-class test_City(test_basemodel):
-    """ """
+class TestCity(unittest.TestCase):
+    """ Unit tests City class """
 
-    def __init__(self, *args, **kwargs):
-        """ """
-        super().__init__(*args, **kwargs)
-        self.name = "City"
-        self.value = City
+    def setUp(self):
+        """ Initialization """
+        self.city_1 = City()
+        self.city_1.name = "San Francisco"
+        self.state = State()
+        self.state.name = "California"
+        self.city_1.state_id = self.state.id
 
-    def test_name(self):
-        """ """
-        new = self.value()
-        self.assertEqual(type(new), City)
+    def test_attr_base(self):
+        """ Test attribut BaseModel """
+        self.assertIsNotNone(self.city_1.id)
+        self.assertIsNotNone(self.city_1.created_at)
+        self.assertIsNotNone(self.city_1.updated_at)
+
+    def test_type_attr_base(self):
+        """ Test type attribut BaseModel """
+        self.assertEqual(type(self.city_1.id), str)
+        self.assertEqual(type(self.city_1.created_at), datetime)
+        self.assertEqual(type(self.city_1.updated_at), datetime)
+
+    def test_attr(self):
+        """ Test attribut City class """
+        self.assertEqual(self.city_1.name, "San Francisco")
+        self.assertEqual(self.city_1.state_id, self.state.id)
+
+    def test_type_args(self):
+        """ Test type attribut City """
+        self.assertEqual(type(self.city_1.name), str)
+        self.assertEqual(type(self.city_1.state_id), str)

@@ -1,9 +1,8 @@
 #!/usr/bin/python3
 """ """
 import unittest
-from tests.test_models.test_base_model import test_basemodel
 from models.amenity import Amenity
-
+from datetime import datetime
 
 class test_Amenity(unittest.TestCase):
     """ Test Amenity Class """
@@ -12,11 +11,6 @@ class test_Amenity(unittest.TestCase):
         """ Initialization """
         self.am_1 = Amenity()
         self.am_1.name = "Kitchen"
-        self.am_2 = Amenity()
-
-    def test_docstring(self):
-        """ Test docstring """
-        self.assertIsNotNone(Amenity.__doc__)
 
     def test_attr_base(self):
         """ Test attribut BaseModel """
@@ -35,11 +29,6 @@ class test_Amenity(unittest.TestCase):
         """ Test attribut Amenity class """
         self.assertEqual(self.am_1.name, "Kitchen")
 
-    def test_no_arg(self):
-        """ Test Amenity class with no attribut """
-        self.assertEqual(self.am_2.name, None)
-
     def test_type_args(self):
         """ Test type attribut Amenity """
         self.assertEqual(type(self.am_1.name), str)
-        self.assertEqual(type(self.am_2.name), None)

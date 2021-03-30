@@ -1,29 +1,43 @@
 #!/usr/bin/python3
-""" """
-from tests.test_models.test_base_model import test_basemodel
+""" Unit tests Review Class """
 from models.review import Review
+from models.user import User
+from models.place import Place
+import unittest
+from datetime import datetime
 
 
-class test_review(test_basemodel):
-    """ """
+class TestReview(unittest.TestCase):
+    """ Unit tests Review Class """
 
-    def __init__(self, *args, **kwargs):
-        """ """
-        super().__init__(*args, **kwargs)
-        self.name = "Review"
-        self.value = Review
+    def setUp(self):
+        """ Initialization """
+        self.place = Place()
+        self.user = User()
+        self.rev_1 = Review()
+        self.rev_1.place_id = self.place.id
+        self.rev_1.user_id = self.user.id
+        self.rev_1.text = "Nice"
 
-    def test_place_id(self):
-        """ """
-        new = self.value()
-        self.assertEqual(type(new.place_id), str)
+    def test_attr_base(self):
+        """ Test attribut BaseModel """
+        self.assertIsNotNone(self.rev_1.id)
+        self.assertIsNotNone(self.rev_1.created_at)
+        self.assertIsNotNone(self.rev_1.updated_at)
 
-    def test_user_id(self):
-        """ """
-        new = self.value()
-        self.assertEqual(type(new.user_id), str)
+    def test_type_attr_base(self):
+        """ Test type attribut BaseModel """
+        self.assertEqual(type(self.rev_1.id), str)
+        self.assertEqual(type(self.rev_1.created_at), datetime)
+        self.assertEqual(type(self.rev_1.updated_at), datetime)
 
-    def test_text(self):
-        """ """
-        new = self.value()
-        self.assertEqual(type(new.text), str)
+    def test_attr(self):
+        """ Test attribut Review class """
+        self.assertEqual(self.rev_1.text, "Nice")
+        self.assertEqual(self.rev_1.place_id, self.place.id)
+        self.assertEqual(self.rev_1.user_id, self.user.id)
+
+
+    def test_type_args(self):
+        """ Test type attribut Review """
+        self.assertEqual(type(self.rev_1.text), str)
