@@ -4,6 +4,7 @@ import unittest
 from models.amenity import Amenity
 from datetime import datetime
 
+
 class test_Amenity(unittest.TestCase):
     """ Test Amenity Class """
 

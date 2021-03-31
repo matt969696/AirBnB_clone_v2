@@ -38,7 +38,6 @@ class TestPlace(unittest.TestCase):
         self.place_2.price_by_night = 110
         self.place_2.amenity_ids = [self.amenity]
 
-
     def test_attr_base(self):
         """ Test attribut BaseModel """
         self.assertIsNotNone(self.place_1.id)

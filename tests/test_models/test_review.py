@@ -37,7 +37,6 @@ class TestReview(unittest.TestCase):
         self.assertEqual(self.rev_1.place_id, self.place.id)
         self.assertEqual(self.rev_1.user_id, self.user.id)
 
-
     def test_type_args(self):
         """ Test type attribut Review """
         self.assertEqual(type(self.rev_1.text), str)
