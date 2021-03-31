@@ -97,7 +97,14 @@ class TestBaseModel(unittest.TestCase):
 
     @unittest.skipIf(getenv("HBNB_TYPE_STORAGE") == 'file',
                      "not supported in db mode")
-    def test_to_dict(self):
+    def test_08_to_dict_db(self):
         """Test the to_dict() method """
         base_dict = self.base1.to_dict()
         self.assertFalse('_sa_instance_state' in base_dict.keys())
+
+    def test_09_to_dict_BaseModel(self):
+        """test if dictionary works"""
+        base_dict = self.base1.to_dict()
+        self.assertEqual(self.base1.__class__.__name__, 'BaseModel')
+        self.assertIsInstance(base_dict['created_at'], str)
+        self.assertIsInstance(base_dict['updated_at'], str)
