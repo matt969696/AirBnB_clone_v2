@@ -22,6 +22,8 @@ class TestCity(unittest.TestCase):
         self.assertIsNotNone(self.city_1.id)
         self.assertIsNotNone(self.city_1.created_at)
         self.assertIsNotNone(self.city_1.updated_at)
+        self.assertIsNotNone(self.city_1.name)
+        self.assertIsNotNone(self.city_1.state_id)
 
     def test_type_attr_base(self):
         """ Test type attribut BaseModel """
