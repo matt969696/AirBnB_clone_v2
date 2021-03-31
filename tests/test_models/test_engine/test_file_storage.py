@@ -100,7 +100,7 @@ class test_fileStorage(unittest.TestCase):
             pass
         with self.assertRaises(ValueError):
             storage.reload()
-    
+
     @unittest.skipIf(getenv('HBNB_TYPE_STORAGE') == 'db',
                      "not supported in db mode")
     def test_reload_from_nonexistent(self):
