@@ -57,11 +57,11 @@ test_db_storage.py'])
                             "{:s} method needs a docstring".format(func[0]))
 
 
+@unittest.skipIf(getenv('HBNB_TYPE_STORAGE') != 'db',
+                 "not supported in file storage mode")
 class TestDBStorage(unittest.TestCase):
     """ Unittest for database storage """
 
-    @unittest.skipIf(getenv('HBNB_TYPE_STORAGE') != 'db',
-                     "not supported in file storage mode")
     def setUp(self):
         """ Set Up """
         self.conn = MySQLdb.connect(getenv("HBNB_MYSQL_HOST"),
@@ -70,8 +70,6 @@ class TestDBStorage(unittest.TestCase):
                                     getenv("HBNB_MYSQL_DB"))
         self.cur = self.conn.cursor()
 
-    @unittest.skipIf(getenv('HBNB_TYPE_STORAGE') != 'db',
-                     "not supported in file storage mode")
     def tearDown(self):
         """ Tear Down """
         self.cur.close()
