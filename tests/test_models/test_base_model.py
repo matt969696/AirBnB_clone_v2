@@ -9,7 +9,7 @@ from unittest.mock import patch
 from models.base_model import BaseModel
 from datetime import datetime
 import uuid
-
+from os import getenv
 
 class TestBaseModel(unittest.TestCase):
     """
@@ -94,3 +94,10 @@ class TestBaseModel(unittest.TestCase):
         new_updated_at = self.base1.updated_at
         self.assertNotEqual(old_updated_at, new_updated_at)
         self.assertEqual(old_created_at, new_created_at)
+
+    @unittest.skipIf(getenv("HBNB_TYPE_STORAGE") == 'file',
+                     "not supported in db mode")
+    def test_to_dict(self):
+        """Test the to_dict() method """
+        base_dict = self.base1.to_dict()
+        self.assertFalse('_sa_instance_state' in base_dict.keys())
