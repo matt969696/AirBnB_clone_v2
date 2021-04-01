@@ -65,10 +65,6 @@ class TestHBNBCommand_global(unittest.TestCase):
         if os.path.isfile('file.jsonSAVE'):
             os.rename("file.jsonSAVE", "file.json")
 
-    def test_prompt_string(self):
-        """Tests the prompt"""
-        self.assertEqual("(hbnb) ", HBNBCommand.prompt)
-
     def test_empty_line(self):
         """Tests empty line"""
         with patch("sys.stdout", new=StringIO()) as f:
