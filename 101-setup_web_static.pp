@@ -4,20 +4,21 @@ exec { 'update':
   command => '/usr/bin/apt-get update',
 }
 
-->package {'nginx':
+package {'nginx':
   ensure   => present,
   name     => 'nginx',
   provider => 'apt'
+  require  => Exec['update'],
 }
 
-->file { '/var/www/html/index.html':
+file { '/var/www/html/index.html':
   ensure  => 'present',
   path    => '/var/www/html/index.html',
   content => 'Holberton School',
   require => Package['nginx'],
 }
 
-->file_line { 'redirect_me':
+file_line { 'redirect_me':
   ensure  => 'present',
   path    => '/etc/nginx/sites-available/default',
   after   => 'listen 80 default_server;',
@@ -25,7 +26,7 @@ exec { 'update':
   require => Package['nginx'],
 }
 
-->file_line { 'addHeader':
+file_line { 'addHeader':
   ensure  => 'present',
   path    => '/etc/nginx/sites-available/default',
   after   => 'listen 80 default_server;',
@@ -33,7 +34,7 @@ exec { 'update':
   require => Package['nginx'],
 }
 
-->file { [ '/data',
+file { [ '/data',
   '/data/web_static',
   '/data/web_static/releases',
   '/data/web_static/shared',
@@ -61,20 +62,18 @@ exec { 'update':
   path => '/usr/bin/:/usr/local/bin/:/bin/'
 }
 
-->file_line {'new location':
+
+file_line {'new location':
   ensure  => present,
   path    => '/etc/nginx/sites-available/default',
   after   => 'listen 80 default_server;',
-  line    => 'location /hbnb_static { alias /data/web_static/current;}',
+  line    => 'location /hbnb_static/ { alias /data/web_static/current/;}',
   require => Package['nginx'],
 }
 
 ->service { 'nginx':
-  ensure  => running,
-  require => Package['nginx'],
-}
-
-service { 'nginx':
-  ensure  => running,
-  require => Package['nginx'],
+  ensure     => running,
+  enable     => true,
+  hasrestart => true,
+  require    => Package['nginx'],
 }
