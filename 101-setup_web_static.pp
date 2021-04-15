@@ -1,19 +1,44 @@
 #Puppet script for complete installation
 
-exec {'/usr/bin/env apt-get update':}
-
-->package {'nginx':
-ensure => installed,
+exec { 'update':
+  command => '/usr/bin/apt-get update',
 }
 
-->file { [ '/data/',
-  '/data/web_static/',
-  '/data/web_static/releases/',
-  '/data/web_static/shared/',
-  '/data/web_static/releases/test/', ]:
+->package {'nginx':
+  ensure   => present,
+  name     => 'nginx',
+  provider => 'apt'
+}
+
+->file { '/var/www/html/index.html':
+  ensure  => 'present',
+  path    => '/var/www/html/index.html',
+  content => 'Holberton School',
+  require => Package['nginx'],
+}
+
+->file_line { 'redirect_me':
+  ensure  => 'present',
+  path    => '/etc/nginx/sites-available/default',
+  after   => 'listen 80 default_server;',
+  line    => 'rewrite ^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;',
+  require => Package['nginx'],
+}
+
+->file_line { 'addHeader':
+  ensure  => 'present',
+  path    => '/etc/nginx/sites-available/default',
+  after   => 'listen 80 default_server;',
+  line    => 'add_header X-Served-By $hostname;',
+  require => Package['nginx'],
+}
+
+->file { [ '/data',
+  '/data/web_static',
+  '/data/web_static/releases',
+  '/data/web_static/shared',
+  '/data/web_static/releases/test', ]:
   ensure => directory,
-  owner  => 'ubuntu',
-  group  => 'ubuntu',
 }
 
 ->file {'/data/web_static/releases/test/index.html':
@@ -25,18 +50,22 @@ ensure => installed,
     Holberton School Test HTML
   </body>
   </html>",
-  owner   => 'ubuntu',
-  group   => 'ubuntu',
 }
 
--> exec {'/usr/bin/env ln -sf /data/web_static/releases/test/ /data/web_static/current':}
--> exec {'/usr/bin/env chown -R ubuntu:ubuntu /data/':}
+->file { '/data/web_static/current':
+  ensure => 'link',
+  target => '/data/web_static/releases/test'
+}
+
+->exec { 'chown -R ubuntu:ubuntu /data/':
+  path => '/usr/bin/:/usr/local/bin/:/bin/'
+}
 
 ->file_line {'new location':
   ensure  => present,
   path    => '/etc/nginx/sites-available/default',
   after   => 'listen 80 default_server;',
-  line    => 'location /hbnb_static/ { alias /data/web_static/current/;}',
+  line    => 'location /hbnb_static { alias /data/web_static/current;}',
   require => Package['nginx'],
 }
 
@@ -45,4 +74,7 @@ ensure => installed,
   require => Package['nginx'],
 }
 
-->exec {'/usr/bin/env service nginx restart':}
+service { 'nginx':
+  ensure  => running,
+  require => Package['nginx'],
+}
